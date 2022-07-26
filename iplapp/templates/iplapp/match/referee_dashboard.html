@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="container-fluid padding">
+<div class="row padding">
+<div class="col-md-12">
+    <div class="table-responsive">
+        <table class="table table-sm table-hover">
+            <tbody>
+                {% for match in match_list %}
+                <tr>
+                    <td>
+                        <a class="fa-icons" href="{% url 'iplapp:match_detail' pk=match.pk %}">
+                            <i class="fa fa-eye"></i>
+                        </a>
+                    </td>
+                    <td style="text-align: right">
+                        <img src="{{ team.team_logo.url }}" width="20">
+                        {{ match.home_team}}
+                    </td>
+                    <td style="text-align: center">
+                        <strong>({{match.home_team_score}} - {{match.guest_team_score}})</strong>
+                    </td>
+                    <td>{{ match.guest_team }}</td>
+                    <td>{{ match.match_day }}, {{ match.match_start_time }}</td>
+                    <td>
+                        {% if match.match_status == 'scheduled' %}
+                            Scheduled
+                        {% elif match.match_status == 'in_progress'%}
+                            In Progress
+                        {% elif match.match_status == 'full_time'%}
+                            Full Time
+                        {% elif match.match_status == 'cancelled'%}
+                            Cancelled
+                        {% elif match.match_status == 'abandoned'%}
+                            Abandoned
+                        {% else %}
+                            Status - Not Available
+                        {% endif %}
+                    </td>
+                    <td>{{ match.field }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+</div>
+
+{% endblock %}

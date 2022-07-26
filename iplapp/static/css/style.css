@@ -1,0 +1,285 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans|Poppins|Ubuntu:400,500,700');
+
+/* Font Awesome */
+.fa-users{
+    color: #ff383f;
+    font-size: 6em;
+    margin: 1rem;
+}
+.fa-plus{
+    color: #999999;
+    font-size: 6em;
+    margin: 1rem;
+}
+
+.fa-trash{
+    color: crimson;
+}
+
+a.fa-icons{
+    text-decoration: none;
+    color: #999999;
+}
+
+/* Navigation bar */
+.navbar {
+    border-bottom:1px solid #d3d3d3;
+}
+
+.nav-item {
+    font-family: 'Ubuntu';
+}
+
+[class^="icon-"], [class*=" icon-"] {
+    display: inline-block;
+    width: 100%;
+}
+
+/* Team cards */
+.card {
+    font-family: 'Ubuntu';
+}
+
+td i{
+    text-align: center;
+}
+
+/* IPL Custom CSS */
+body {
+    font-family: 'Open Sans';
+}
+
+h1 {
+    font-family: 'Ubuntu';
+    font-weight: lighter;
+}
+
+h2, h3 {
+    font-family: 'Ubuntu';
+    font-weight: bold;
+}
+
+/* IPL Dark Card*/
+.ipl-card-dark {
+    color: #fff;
+    background-color: #123c69;
+    border: 1px solid #fff;
+}
+.ipl-card-light {
+    color: #FFFFFF;
+    background-color: #2c3531;
+    border: 1px solid #fff;
+}
+
+.pil-card-light h5 {
+    color: #ffc4c5;
+}
+
+/*For Live Indicator*/
+.ipl-status-box {
+    background-color: #fdce4b;
+    color: white;
+    display: inline-block;
+    width: 50px;
+    border: 1px solid #fdce4b;
+    text-align: center;
+    border-radius: 5px;
+}
+
+/*For Match scorecard in Home and Match Details*/
+.ipl-scorecard {
+    /*background: #eeeeee;*/
+    background: #efefef;
+    color: #505050;
+    margin: 0px 10px 5px 10px;
+}
+
+/*Match score ex - [1-2]*/
+.ipl-livescore {
+    font-family: 'Ubuntu';
+    padding: 5px 25px 5px 25px;
+    background: #ff3b3f;
+    color: #ffffff;
+    font-size: 1.8em;
+    font-weight: bold;
+}
+
+.ipl-livescore-small {
+    font-family: 'Ubuntu';
+    padding: 5px 15px 5px 15px;
+    background: #ff3b3f;
+    color: #ffffff;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+/*Match score subtitle*/
+.ipl-livescore-sub {
+    font-weight: lighter;
+    padding: 10px;
+}
+
+/*---Media Queries --*/
+@media (max-width: 992px) {
+
+  }
+@media (max-width: 768px) {
+
+}
+@media (max-width: 576px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+    h2{
+        font-size: 1.4rem;
+    }
+    h3 {
+        font-size: 1.1rem;
+    }
+    .ipl-livescore {
+        padding: 5px 15px 5px 15px;
+        font-size: 1.3em;
+    }
+    .ipl-livescore-sub {
+        font-size: 0.8rem;
+    }
+    .ipl-scorecard {
+        margin: 5px 0px 5px 0px;
+    }
+    h6 {
+        font-size: 0.8rem;
+    }
+}
+
+
+/*---Firefox Bug Fix --*/
+.carousel-item {
+  transition: -webkit-transform 0.5s ease;
+  transition: transform 0.5s ease;
+  transition: transform 0.5s ease, -webkit-transform 0.5s ease;
+  -webkit-backface-visibility: visible;
+  backface-visibility: visible;
+}
+
+.carousel-control-prev-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E") !important;
+    margin-left: -50%;
+}
+
+.carousel-control-next-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E") !important;
+    margin-right: -50%;
+}
+
+/*--- Fixed Background Image --*/
+figure {
+  position: relative;
+  width: 100%;
+  height: 60%;
+  margin: 0!important;
+}
+.fixed-wrap {
+  clip: rect(0, auto, auto, 0);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+#fixed {
+  background-image: url('img/mac.png');
+  position: fixed;
+  display: block;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center center;
+  -webkit-transform: translateZ(0);
+          transform: translateZ(0);
+  will-change: transform;
+}
+/*--- Bootstrap Padding Fix --*/
+[class*="col-"] {
+    padding: 1rem;
+}
+
+/*---Secondary Nav---*/
+html,
+body {
+  overflow-x: hidden; /* Prevent scroll on narrow devices */
+}
+
+.nav-scroller {
+  position: relative;
+  z-index: 2;
+  height: 2.75rem;
+  overflow-y: hidden;
+}
+
+.nav-scroller .nav {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+  padding-bottom: 1rem;
+  margin-top: -1px;
+  overflow-x: auto;
+  color: rgba(255, 255, 255, .75);
+  text-align: center;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+    background-color: #efefef;
+}
+
+.nav-underline .nav-link {
+  padding-top: .75rem;
+  padding-bottom: .75rem;
+  font-size: .875rem;
+  color: #999999;
+}
+
+.nav-underline .nav-link:hover {
+  color: #007bff;
+}
+
+.nav-underline .active {
+  font-weight: 700;
+  color: #343a40;
+}
+
+.module {
+    padding:10px 20px;
+    float:left;
+    width:600px;
+}
+
+.module h3 {
+    margin:20px 0 0;
+    padding:0;
+    width:100%;
+}
+
+.module p {
+    margin:10px 0 20px;
+    width:100%;
+    float:left;
+}
+
+/*
+Extra small (xs) devices (portrait phones, less than 576px)
+No media query since this is the default in Bootstrap
+
+Small (sm) devices (landscape phones, 576px and up)
+@media (min-width: 576px) { ... }
+
+Medium (md) devices (tablets, 768px and up)
+@media (min-width: 768px) { ... }
+
+Large (lg) devices (desktops, 992px and up)
+@media (min-width: 992px) { ... }
+
+Extra (xl) large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) { ... }
+*/

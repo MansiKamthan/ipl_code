@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block content %}
+
+{% if matches_live %}
+<div class="container">
+<div class="row text-center">
+<div class="ipl-scorecard col-12 mx-0 pt-0">
+    <div id="carouselLive" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            {% for match in matches_live %}
+            <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %}">
+                    <div class="row text-left mt-2 pl-1">
+                        <div class="col-12">
+                            <h6>
+                                {{match.match_day}} | {{match.field}} | Started at {{match.match_start_time}}
+                                &nbsp;<span class="ipl-status-box">LIVE</span>
+                            </h6>
+                            <hr>
+                        </div>
+                    </div>
+                    <div class="row mx-1">
+                        <div class="col-4 col-sm-4 col-md-4 col-lg-4">
+                            <img src="{{ match.home_team.team_logo_url }}" class="img-fluid mx-auto mb-3" width="125">
+                            <h3>{{match.home_team.team_name}}</h3>
+                        </div>
+                        <div class="col-4 col-sm-4 col-md-4 col-lg-4 my-auto">
+                            <span class="ipl-livescore">
+                                {{match.home_team_score}} - {{match.guest_team_score}}
+                            </span>
+                            <p class="ipl-livescore-sub">
+                            {% if match.match_status == 'scheduled' %}
+                                Scheduled
+                            {% elif match.match_status == 'in_progress'%}
+                                In Progress
+                            {% elif match.match_status == 'full_time'%}
+                                Full Time
+                            {% elif match.match_status == 'cancelled'%}
+                                Cancelled
+                            {% elif match.match_status == 'abandoned'%}
+                                Abandoned
+                            {% else %}
+                                Status - Not Available
+                            {% endif %}
+
+                            </p>
+                        </div>
+                        <div class="col-4 col-sm-4 col-md-4 col-lg-4">
+                            <img src="{{ match.guest_team.team_logo_url }}" class="img-fluid mx-auto mb-3" width="125">
+                            <h3>{{match.guest_team.team_name}}</h3>
+                        </div>
+                    </div>
+            </div>
+            {% endfor %}
+        </div>
+        <a class="carousel-control-prev" href="#carouselLive" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselLive" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+</div>
+</div>
+</div>
+{% endif %}
+<div class="container">
+<div class="row mb-4">
+    <div class="ipl-card-dark col-md-6">
+        <h3>Match Results</h3>
+        <hr style="border-color: #d3d3d3;">
+        <div class="ipl-list pt-2">
+            {% for match in matches_full %}
+                {% if forloop.counter != 1 %}
+                    <hr style="border-color: #222; margin-top:0px; margin-bottom: 0px">
+                {% endif %}
+                <div class="row">
+                    <div class="col-12 px-4 py-2" style="color: #8ebbec">
+                        {{ match.match_day }}
+                    </div>
+                </div>
+                <div class="row text-center">
+                    <div class="col-4 py-0">
+                        {{ match.home_team.team_short_name}}&nbsp;
+                        <img src="{{ match.home_team.team_logo_url }}" class="img-fluid mx-auto mb-3" width="30">
+                    </div>
+                    <div class="col-4 py-0">
+                        <span class="ipl-livescore-small">
+                                {{match.home_team_score}} - {{match.guest_team_score}}
+                        </span>
+                    </div>
+                    <div class="col-4 py-0">
+                        <img src="{{ match.guest_team.team_logo_url }}" class="img-fluid mx-auto mb-3" width="30">
+                        &nbsp;{{ match.guest_team.team_short_name}}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="ipl-card-dark col-md-6">
+        <h3>Upcoming Matches</h3>
+        <hr style="border-color: #d3d3d3;">
+        <div class="ipl-list pt-2">
+            {% for match in matches_sch %}
+                {% if forloop.counter != 1 %}
+                    <hr style="border-color: #222; margin-top:0px; margin-bottom: 0px">
+                {% endif %}
+                <div class="row">
+                    <div class="col-12 px-4 py-2" style="color: #8ebbec">
+                        {{ match.match_day }}
+                    </div>
+                </div>
+                <div class="row text-center">
+                    <div class="col-4 py-0">
+                        {{ match.home_team.team_short_name}}&nbsp;
+
+                    </div>
+                    <div class="col-4 py-0">
+                        vs
+                    </div>
+                    <div class="col-4 py-0">
+
+                        &nbsp;{{ match.guest_team.team_short_name}}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <h2>Season Statistics</h2>
+    </div>
+    <div class="ipl-card-light col-md-6">
+        <h3>
+            Point Table
+            {% if user.is_authenticated and request.user.is_superuser or user.groups.all and user.groups.all.0.name == "Admin" %}
+            <a class="btn btn-info" href="{% url 'iplapp:refresh_point_table' %}" data-toggle="tooltip" title="Refresh Points">
+                <i class="fas fa-sync-alt"></i>
+            </a>
+            {% endif %}
+        </h3>
+        <hr style="border-color: #fff;">
+        <table class="table table-hover">
+        <thead class="thead-light">
+        <tr>
+            <th> Position </th>
+            <th>Team Name </th>
+            <th>Points</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for team in teams %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>  &nbsp; {{ team.team_short_name }}  </td>
+            <td>{{ team.team_point }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+        </table>
+    </div>
+    <div class="ipl-card-light col-md-6">
+        <h3>Top Scorers</h3>
+        <hr style="border-color: #fff;">
+        {% for player in player_goals_top %}
+                <div class="row">
+                    <div class="col-3 text-right">
+
+                    </div>
+                    <div class="col-6">
+                        <h4>
+                            {{ player.player__first_name }}&nbsp;{{ player.player__last_name }}<br>
+                            <small style="color:#ffc4c5">{{ player.player__team__team_short_name }}</small>
+                        </h4>
+                    </div>
+                    <div class="col-3">
+                        <h4>{{ player.goal_count }}</h4>
+                    </div>
+                </div>
+        {% endfor %}
+    </div>
+</div>
+</div>
+{% endblock %}

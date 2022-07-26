@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid padding">
+<div class="row padding">
+<div class="col-md-12">
+    <div class="tabbable">
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+                  <li class="nav-item">
+                      <a class="nav-link active" id="roleslist-tab" data-toggle="tab" href="#roleslist" role="tab" aria-controls="roleslist" aria-selected="true">Roles</a>
+                  </li>
+                   <li>
+                     <a class="nav-link" id="pending-tab" data-toggle="tab" href="#pending" role="tab" aria-controls="pending" aria-selected="true">Pending</a>
+                 </li>
+                <li>
+                    <a class="btn btn-info" href="{% url 'iplapp:assign_role' %}" data-toggle="tooltip" title="Assign new role">
+                    <i class="fas fa-plus" style="font-size: 1.2em; margin: 0rem; color: #FFFFFF; text-decoration: none;"></i>
+                    </a>
+
+                 </li>
+
+
+          </ul></br>
+            {% if sent == "True" %}
+                <div class="page-container">
+                    <p>Email has been successfully sent to {{ emailid }}</p>
+                </div>
+            {% endif %}
+          <div class="tab-content" id="myTabContent">
+              <div class="tab-pane fade show active col-md-8" role="tabpanel" aria-labelledby="roleslist-tab" id="roleslist">
+
+                  <table class="table table-striped table-bordered table-hover">
+                     <thead>
+                         <tr class="bg-info">
+                             <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                         </tr>
+                     </thead>
+                      <tbody>
+                        {% for user in user_list %}
+                            <tr>
+                                <td>{{ user.username }} </td>
+                                <td>{{ user.email }}</td>
+                                {% if user.groups.all.0 %}
+                                     <td>{{ user.groups.all.0 }}</td>
+                                {% else %}
+                                    <td>Super User</td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+
+                        </tbody>
+                      </table>
+               </div>
+              <div class="tab-pane fade col-md-8" id="pending" role="tabpanel" aria-labelledby="pending-tab" >
+                  <table class="table table-striped table-bordered table-hover">
+                      <thead>
+                         <tr class="bg-info">
+                             <th>Role</th>
+                            <th>Receiver Name</th>
+                            <th>Receiver Email</th>
+                             <th>Registered</th>
+                             <th>Action</th>
+                         </tr>
+                     </thead>
+                      <tbody>
+                        {% for role in roles_list %}
+                            <tr>
+                                <td>{{ role.role }} </td>
+                                <td>{{ role.receiver_name }}</td>
+                                <td>{{ role.receiver_email }}</td>
+                                <td>{{ role.registered }}</td>
+                                <td><a href="{% url 'iplapp:delete_role' pk=role.pk %}"
+                                   onclick="return confirm('Are you sure you want to delete?')"
+                                   class="btn btn-danger">Delete</a>
+                            </td>
+                            </tr>
+                        {% endfor %}
+
+                        </tbody>
+                      </table>
+              </div>
+
+          </div>
+    </div>
+</div>
+</div>
+</div>
+{% endblock%}

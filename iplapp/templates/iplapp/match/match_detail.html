@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid padding">
+<div class="row justify-content-center text-center">
+    <div class="ipl-scorecard col-12 col-sm-12 col-md-10 col-lg-8">
+        <div class="row text-left mt-2">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                <h6>{{match.match_day}} | {{match.field}} | Started at {{match.match_start_time}}</h6>
+                <hr>
+            </div>
+        </div>
+        <div class="row mx-1">
+            <div class="col-4 col-sm-4 col-md-4 col-lg-4">
+                <img src="{{ home_team.team_logo_url }}" class="img-fluid mx-auto mb-3" width="125">
+                <h3>{{home_team.team_name}}</h3>
+            </div>
+            <div class="col-4 col-sm-4 col-md-4 col-lg-4 my-auto">
+                <span class="ipl-livescore">
+                    {{home_goals|length}} - {{guest_goals|length}}
+                </span>
+                <p class="ipl-livescore-sub">
+                {% if match.match_status == 'scheduled' %}
+                    Scheduled
+                {% elif match.match_status == 'in_progress'%}
+                    In Progress
+                {% elif match.match_status == 'full_time'%}
+                    Full Time
+                {% elif match.match_status == 'cancelled'%}
+                    Cancelled
+                {% elif match.match_status == 'abandoned'%}
+                    Abandoned
+                {% else %}
+                    Status - Not Available
+                {% endif %}
+
+                </p>
+            </div>
+            <div class="col-4 col-sm-4 col-md-4 col-lg-4">
+                <img src="{{ guest_team.team_logo_url }}" class="img-fluid mx-auto mb-3" width="125">
+                <h3>{{guest_team.team_name}}</h3>
+            </div>
+        </div>
+        <div class="row mx-1">
+            <div class="ipl-livescore-sub col-6 col-sm-6 col-md-6 col-lg-6 text-right">
+                {% for goal in home_goals%}
+                    <p>
+                        {{goal.player}}&nbsp;{{goal.run}}'
+                        <i class="far fa-futbol"></i>
+                    </p>
+                {% endfor%}
+            </div>
+            <div class="ipl-livescore-sub col-6 col-sm-6 col-md-6 col-lg-6 text-left">
+                {% for goal in guest_goals%}
+                    <p>
+                        <i class="far fa-futbol"></i>&nbsp;
+                        {{goal.run}}'&nbsp;{{goal.player}}
+                    </p>
+                {% endfor%}
+            </div>
+        </div>
+        {% if user.is_authenticated and user.groups.all and user.groups.all.0.name == "Referee" and match.match_referee == user or request.user.is_superuser%}
+        {% if match.match_status == 'scheduled' or match.match_status == 'in_progress' or request.user.is_superuser%}
+            <hr>
+            <div class="row mx-1">
+                <div class="ipl-livescore-sub col-6 col-sm-6 col-md-6 col-lg-6 text-right">
+                    <form method="POST" id="homeGoalForm" class="goal-form">
+                        {{home_goal_form.as_p}}
+                        {%csrf_token%}
+                        <button type="submit" name="home_goal_submit" class="save btn btn-default">Add Score</button>
+                    </form>
+                </div>
+                <div class="ipl-livescore-sub col-6 col-sm-6 col-md-6 col-lg-6 text-left">
+                    <form method="POST" id="guestGoalForm" class="goal-form">
+                        {{guest_goal_form.as_p}}
+                        {%csrf_token%}
+                        <button type="submit" name="guest_goal_submit" class="save btn btn-default">Add Goal</button>
+                    </form>
+                </div>
+            </div>
+            <hr>
+            <div class="row mx-1">
+                <div class="ipl-livescore-sub col-12 col-sm-12 col-md-12 col-lg-12 text-left">
+                    <form method="POST" id="matchStatusForm" class="goal-form">
+                        {{match_status_form.as_p}}
+                        {%csrf_token%}
+                        <button type="submit" name="update_match_status" class="save btn btn-default">Update Match Status</button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+        {% endif %}
+    </div>
+</div>
+</div>
+{% endblock %}

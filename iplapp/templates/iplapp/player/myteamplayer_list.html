@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="container-fluid padding">
+    <p>
+        Total Number of Players: <strong>{{player_count}}</strong><br>
+    </p>
+
+    <div class="row padding">
+        <div class="col-md-12">
+          {% if myplayer %}
+              <div class="col-xs4- col-sm-4 col-md-2 col-lg-1">
+              <a href="{% url 'iplapp:player_new' coachid=coachid %}"  class="btn btn-primary">
+              <i class="fas fa-plus" style="font-size: 1.2em; margin: 0rem; color: #FFFFFF; text-decoration: none;"></i> Add More</a>
+            </div>
+            <table class="table table-striped table-bordered table-hover">
+                  <thead>
+                 <tr class="bg-info">
+                     <th> ACTIONS </th>
+                      <th>PLAYER NAME </th>
+                      <th>ROLE IN TEAM</th>
+                      <th>SQUAD POSITION</th>
+                      <th> STATUS </th>
+
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {% for player in myplayer %}
+                  <tr>
+                      <td>
+                        <a class="fa-icons" href="{% url 'iplapp:player_detail' pk=player.pk %}">
+                            <i class="fa fa-eye"></i>
+                        </a>
+                        &nbsp
+                        <a class="fa-icons" href="{% url 'iplapp:player_edit' pk=player.pk coachid=coachid %}">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                        &nbsp
+                        <a class="fa-icons" href="{% url 'iplapp:player_delete' pk=player.pk coachid=coachid %}" onclick="return confirm('Are you sure you want to Delete?')">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                    </td>
+                      <td>{{ player.first_name}}&nbsp;{{ player.last_name }}</td>
+                      <td>{{ player.team_role }}</td>
+                      <td>{{ player.squad_position }}</td>
+                      <td> {{ player.eligibility_status}}</td>
+                  </tr>
+                  {% endfor %}
+
+                  </tbody>
+              </table>
+            {% else %}
+            <p> No Team assigned to the coach yet, please contact Admin.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
