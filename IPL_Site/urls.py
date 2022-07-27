@@ -16,18 +16,18 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include, re_path
 from django.contrib.auth import views as auth_views
-from iplapp.views import home, register_view
+from iplapp.views import home, register_view, login_view, logout_view
 
 urlpatterns = [
-    path('accounts/login/', auth_views.LoginView.as_view(), name='login'),
-    path('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),
+    re_path(r'^accounts/login/$', login_view, name='login'),
+    re_path(r'^accounts/logout/$', logout_view, name='logout'),
     path('admin/', admin.site.urls),
     path('iplapp/', include('iplapp.urls', namespace='iplapp')),
     path('', home, name='home'),
     re_path(r'^home/$', home, name='home'),
     path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
     path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
-    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('reset/<uidb64>/<token>', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
     path('register/', register_view, name='register'),
 ]

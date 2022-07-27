@@ -166,7 +166,7 @@
     <div class="ipl-card-light col-md-6">
         <h3>Top Scorers</h3>
         <hr style="border-color: #fff;">
-        {% for player in player_goals_top %}
+        {% for player in player_run_scorer %}
                 <div class="row">
                     <div class="col-3 text-right">
 
@@ -178,7 +178,7 @@
                         </h4>
                     </div>
                     <div class="col-3">
-                        <h4>{{ player.goal_count }}</h4>
+                        <h4>{{ player.total_run }}</h4>
                     </div>
                 </div>
         {% endfor %}

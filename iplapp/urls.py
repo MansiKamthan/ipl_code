@@ -3,6 +3,7 @@ from django.urls import path, re_path
 from . import views
 from django.conf import settings
 from django.views.static import serve
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 app_name = 'iplapp'
 
@@ -11,9 +12,9 @@ urlpatterns = [
     path('', views.home, name="home"),
     re_path(r'^home/$', views.home, name='home'),
 
-    url(r'^register/success/$', views.register_success, name='success'),
-    url(r'^password/$', views.change_password, name='change_password'),
-    url(r'^password/success/$', views.password_success, name='password_success'),
+    path('register/success/', views.register_success, name='success'),
+    path('password/', views.change_password, name='change_password'),
+    path('password/success/', views.password_success, name='password_success'),
     # team views
     path('team_list', views.team_list, name='team_list'),
     path('team/<int:pk>/', views.team_detail, name='team_detail'),
@@ -46,6 +47,8 @@ urlpatterns = [
     path('roles', views.role_list, name='role_list'),
     path('roles/delete/<int:pk>/', views.delete_role, name='delete_role'),
 ]
+
+urlpatterns += staticfiles_urlpatterns()
 
 if settings.DEBUG:
     urlpatterns += [

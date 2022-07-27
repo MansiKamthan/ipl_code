@@ -10,7 +10,7 @@ User = get_user_model()
 class TeamForm(forms.ModelForm):
     class Meta:
         model = Team
-        fields = ('team_name', 'active_status', 'team_state', 'coach')
+        fields = ('team_name', 'team_logo_url', 'team_short_name', 'active_status', 'team_state', 'coach')
 
         def __init__(self, *args, **kwargs):
             super(TeamForm, self).__init__(*args, **kwargs)

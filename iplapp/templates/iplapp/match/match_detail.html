@@ -46,20 +46,20 @@
                 {% for goal in home_goals%}
                     <p>
                         {{goal.player}}&nbsp;{{goal.run}}'
-                        <i class="far fa-futbol"></i>
+                        <i class="fas fa-baseball-ball"></i>
                     </p>
                 {% endfor%}
             </div>
             <div class="ipl-livescore-sub col-6 col-sm-6 col-md-6 col-lg-6 text-left">
                 {% for goal in guest_goals%}
                     <p>
-                        <i class="far fa-futbol"></i>&nbsp;
+                        <i class="fas fa-baseball-ball"></i>&nbsp;
                         {{goal.run}}'&nbsp;{{goal.player}}
                     </p>
                 {% endfor%}
             </div>
         </div>
-        {% if user.is_authenticated and user.groups.all and user.groups.all.0.name == "Referee" and match.match_referee == user or request.user.is_superuser%}
+        {% if user.is_authenticated and user.groups.all and user.groups.all.0.name == "Scorer" and match.match_referee == user or request.user.is_superuser%}
         {% if match.match_status == 'scheduled' or match.match_status == 'in_progress' or request.user.is_superuser%}
             <hr>
             <div class="row mx-1">

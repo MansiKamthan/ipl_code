@@ -17,7 +17,7 @@
 <!--Navigation Bar-->
 <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
     <div class="container-fluid">
-        <a class="navbar-brand" href="{% url 'iplapp:home' %}"><img width="200px" src="{% static 'images/logo.png' %}"></a>
+        <a class="navbar-brand" href="{% url 'iplapp:home' %}"><img width="100px" src="{% static 'ipl_images/media/IPL_logo.jpg' %}"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -47,7 +47,7 @@
                     <a class="nav-link" href="{% url 'iplapp:myteamplayer_list' pk=user.pk %}" >My Team</a>
                 </li>
                 {% endif %}
-                {% if user.is_authenticated and user.groups.all and user.groups.all.0.name == "Referee" %}
+                {% if user.is_authenticated and user.groups.all and user.groups.all.0.name == "Scorer" %}
                 <li class="nav-item {% if url_name == 'match_referee' %}active{% endif %}">
                     <a class="nav-link" href="{% url 'iplapp:match_referee' pk=user.pk %}" >My Matches</a>
                 </li>
@@ -61,12 +61,16 @@
                             {{ user.first_name }}
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="{% url 'iplapp:change_password' %}">Change Password</a>
                             <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
                         </div>
                     </li>
                 {% else %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}">Register</a>
                     </li>
                 {% endif %}
             </ul>

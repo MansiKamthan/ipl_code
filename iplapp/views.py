@@ -25,22 +25,45 @@ def team_list(request):
 
 def team_detail(request, pk):
     cap = 'None';
+    Won = 0;
+    Lost = 0;
+    Drawn = 0;
     try:
         team = get_object_or_404(Team, pk=pk)
         name = team.team_name
+        run_list = PlayerStats.objects.filter(team=team).order_by('-created_date')[:10]
+        matchesasguest = Match.objects.filter(guest_team=team.id)
+        for match in matchesasguest:
+            if match.guest_team_score > match.home_team_score:
+                Won = Won + 1;
+            if match.guest_team_score == match.home_team_score:
+                Drawn = Drawn + 1
+            if match.guest_team_score < match.home_team_score:
+                Lost = Lost + 1
+
+        matchesashome = Match.objects.filter(home_team=team.id)
+        for match in matchesashome:
+            if match.home_team_score > match.guest_team_score:
+                Won = Won + 1;
+            if match.guest_team_score == match.home_team_score:
+                Drawn = Drawn + 1
+            if match.home_team_score < match.guest_team_score:
+                Lost = Lost + 1
         players = Player.objects.filter(team=team.id).filter(eligibility_status='eligible')
         for player in players:
-            cap = player.first_name + " " + player.last_name
-
+            if player.team_role == 'captain':
+                cap = player.first_name + " " + player.last_name
+        totalrun = run_list.aggregate(TOTAL=Sum('run'))['TOTAL']
         return render(request, 'iplapp/team/team_detail.html', {'team': team,
-                                                                'players': players,
-                                                                'cap': cap
-                                                                })
+                                                'run_list': run_list,
+                                                'goals_count': totalrun,'players':players,
+                                                'cap':cap,'Won':Won,'Lost':Lost,'Drawn':Drawn
+                                                      })
     except Team.DoesNotExist:
-        return render(request, 'iplapp/myteam_detail.html',
-                      {'players': None, 'cap': None})
+        return render(request, 'iplapp/team/team_detail.html',
+                      {'run_list': None,'cap':None,'players':None,'totalrun':0})
 
-
+@login_required
 def team_new(request):
     if request.method == "POST":
         #update
@@ -56,7 +79,7 @@ def team_new(request):
         form = TeamForm()
     return render(request, 'iplapp/team/team_edit.html', {'form': form})
 
-
+@login_required
 def team_edit(request, pk):
     team = get_object_or_404(Team, pk=pk)
     if request.method == "POST":
@@ -72,7 +95,7 @@ def team_edit(request, pk):
         form = TeamForm(instance=team)
     return render(request, 'iplapp/team/team_edit.html', {'form': form})
 
-
+@login_required
 def team_delete(request, pk):
     team = get_object_or_404(Team, pk=pk)
     team.active_status = 'inactive'
@@ -85,7 +108,7 @@ def player_detail(request, pk):
     player = get_object_or_404(Player, pk=pk)
     team = player.team
     run_list = PlayerStats.objects.filter(player=player).order_by('-created_date')[:5]
-    run_count = run_list.aggregate(Sum('run'))
+    run_count = run_list.aggregate(TOTAL=Sum('run'))['TOTAL']
     return render(request, 'iplapp/player/player_detail.html', {'player': player,
                                                                 'run_list': run_list,
                                                                 'run_count': run_count,
@@ -104,6 +127,7 @@ def player_list(request):
     return render(request, 'iplapp/player/player_list.html', {'player_list': player_list,
                                                               'player_count': player_count})
 
+@login_required
 def myteamplayer_list(request, pk):
     try:
         team = Team.objects.get(coach_id=pk)
@@ -121,20 +145,21 @@ def myteamplayer_list(request, pk):
                        'coachid': pk
                        })
 
+@login_required
 def player_new(request, coachid):
     if request.method == 'POST':
         form = PlayerFormEditAdd(request.POST)
         if form.is_valid():
             try:
-                team = Team.objects.get(coachid)
+                team = Team.objects.get(coach_id=coachid)
                 if team != None:
                     player = form.save(commit=False)
                     player.created_date = timezone.now()
                     player.team = team
                     player.save()
 
-                    players = Player.objevts.filter(team=team.id)
-                    player_count = player.count()
+                    players = Player.objects.filter(team=team.id)
+                    player_count = players.count()
                 return render(request, 'iplapp/player/myteamplayer_list.html',
                               {'myplayer': players,
                                'player_count': player_count,
@@ -148,8 +173,9 @@ def player_new(request, coachid):
     else:
         #edit player
         form = PlayerFormEditAdd()
-        return render(request, 'iplapp/player/player_edit.html', {'form': form})
+    return render(request, 'iplapp/player/player_edit.html', {'form': form})
 
+@login_required
 def player_edit(request, pk, coachid):
     player = get_object_or_404(Player, pk=pk)
     if request.method == "POST":
@@ -175,7 +201,7 @@ def player_edit(request, pk, coachid):
         form = PlayerFormEditAdd(instance = player)
     return render(request, 'iplapp/player/player_edit.html', {'form': form})
 
-
+@login_required
 def player_delete(request, pk, coachid):
     player = get_object_or_404(Player, pk=pk)
     player.eligibility_status = 'ineligible'
@@ -183,8 +209,8 @@ def player_delete(request, pk, coachid):
     team = Team.objects.get(coach_id=coachid)
     if team != None:
         players = Player.objects.filter(team=team.id)
-        player_count = player.count()
-    return render(request, 'iplapp/player/myteamplayer.html',
+        player_count = players.count()
+    return render(request, 'iplapp/player/myteamplayer_list.html',
                             {'myplayer': players,
                             'player_count': player_count,
                              'coachid': coachid})
@@ -394,7 +420,6 @@ def assign_role(request):
             subject = 'Activate your IPL account as ' + cd['role']
             message = "Hi!\n You are selected as '" + cd['role'] +"' from IPL administration." \
                     "\nPlease register at IPL using below link \n " +final_url + "\n Thanks ! IPL"
-            #message = 'Please register at IPL as  ' + cd['role'] + 'using below url.'+ final_url + 'Thanks ! IPL'
 
             send_mail(subject, message, 'indianpremierleague202208@gmail.com', [cd['receiver_email']])
             return render(request, 'iplapp/role/roles.html', {'roles_list': role_list, 'user_list': user_list,
