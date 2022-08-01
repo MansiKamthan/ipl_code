@@ -223,7 +223,8 @@ def home(request):
     matches_live = Match.objects.filter(match_status='in_progress')
     team_live = Team.objects.filter(id=1)
     player_run_scorer = PlayerStats.objects.values('player__first_name', 'player__last_name',
-                                                  'player__team__team_short_name').annotate(total_run=Sum('run'))\
+                                                  'player__team__team_short_name', 'player__team__team_logo_url')\
+                                                .annotate(total_run=Sum('run'))\
                                                 .order_by('-total_run')[:5]
     teams = Team.objects.filter(created_date__lte=timezone.now()).order_by('-team_point')
     return render(request, 'home.html', {'matches_sch': matches_sch,
@@ -502,7 +503,7 @@ def change_password(request):
             messages.success(request, 'Your password was successfully updated!')
             print('form-valid-', form)
             #return redirect('ipl_app:home')
-            return HttpResponseRedirect('/password/success/')
+            return HttpResponseRedirect('success/')
         else:
             messages.error(request, 'Please correct the error below.')
     else:

@@ -116,13 +116,14 @@
                 <div class="row text-center">
                     <div class="col-4 py-0">
                         {{ match.home_team.team_short_name}}&nbsp;
+                        <img src="{{ match.home_team.team_logo_url }}" class="img-fluid mx-auto mb-3" width="30">
 
                     </div>
                     <div class="col-4 py-0">
                         vs
                     </div>
                     <div class="col-4 py-0">
-
+                        <img src="{{ match.guest_team.team_logo_url }}" class="img-fluid mx-auto mb-3" width="30">
                         &nbsp;{{ match.guest_team.team_short_name}}
                     </div>
                 </div>
@@ -169,7 +170,7 @@
         {% for player in player_run_scorer %}
                 <div class="row">
                     <div class="col-3 text-right">
-
+                        <img src="{{ player.player__team__team_logo_url }}" class="img-fluid mx-auto mb-3" width="50">
                     </div>
                     <div class="col-6">
                         <h4>
